@@ -1,8 +1,8 @@
-from mother.Animal import Animal
-from particular.meat import Meat
-from mother.Food import Food
+from app_arca.models.mother.Animal import Animal
+from app_arca.models.particular.meat import Meat
+from app_arca.models.mother.Food import Food
 class Carnival(Animal):
-    def __init__(self , name : str, hunger : bool , thirst : bool, type=1):
+    def __init__(self , name : str, hunger : bool , thirst : bool,size:int, type=1):
         self.name = name
         self.hunger = hunger
         self.thirst = thirst
@@ -22,8 +22,8 @@ class Carnival(Animal):
         else:
             self.set_hunger(False)
             animal.is_alive = False
-lion = Carnival(name="Lion" , hunger= True)
-rabit = Animal(name="Rabit" , type=0)
-lion.cazar(rabit)
+#lion = Carnival(name="Lion" , hunger= True)
+#rabit = Animal(name="Rabit" , type=0)
+#lion.cazar(rabit)
 
 

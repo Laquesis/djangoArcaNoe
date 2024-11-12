@@ -1,6 +1,6 @@
 import random
 import threading
-from mother.Animal import Animal
+from app_arca.models.mother.Animal import Animal
 
 class Herbivore(Animal):
     def __init__(self, name, hunger=False, thirst=False, size=1, sentiment=0, sex=None):      

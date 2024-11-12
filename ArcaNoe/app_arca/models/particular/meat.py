@@ -1,4 +1,4 @@
-from models.mother.Food import Food
+from app_arca.models.mother.Food import Food
 # Clase hija Meat
 class Meat(Food):
     def __init__(self, name, calorias=None, caducidad=None):

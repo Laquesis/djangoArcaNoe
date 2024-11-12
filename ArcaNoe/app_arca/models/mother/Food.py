@@ -1,5 +1,5 @@
-from mother.Animal import Animal
-from mother.Ark import Ark
+#from app_arca.models.mother.Animal import Animal
+#from app_arca.models.mother.Ark import Ark
 import random
 
 class Food:
@@ -29,6 +29,7 @@ class Food:
             print(f"Error al crear el alimento: {e}")
 
     def crear_alimento(self,name):
+        from app_arca.models.mother.Ark import Ark
         # Generación aleatoria de valores y validación
         try:
             if not isinstance(name, str):

@@ -1,8 +1,10 @@
-from app_arca.models.mother.Animal import Animal
-from app_arca.models.mother.Food import Food
+#from app_arca.models.mother.Animal import Animal
+#from app_arca.models.mother.Food import Food
 
 class Ark:
     def __init__(self, animals=None, foods=None, water=None, max_capacity=None, left=False, tiempo=None):
+        from app_arca.models.mother.Animal import Animal
+        from app_arca.models.mother.Food import Food
         try:
             if animals is None:
                 animals = []
@@ -51,6 +53,7 @@ class Ark:
             print(f"Error en left_ark: {e}")
 
     def add_animal(self, animal):
+        from app_arca.models.mother.Animal import Animal
         try:
             if len(self.animals) < self.max_capacity["animal"] and not self.left:
                 self.animals.append(animal)
@@ -86,6 +89,7 @@ class Ark:
             print(f"Error en add_water: {e}")
 
     def add_multi_animal(self, list_animal):
+        from app_arca.models.mother.Animal import Animal
         try:
             if not all(isinstance(animal, Animal) for animal in list_animal):
                 raise TypeError("Todos los elementos de 'list_animal' deben ser instancias de la clase Animal.")
@@ -99,6 +103,7 @@ class Ark:
             print(f"Error en add_multi_animal: {e}")
 
     def add_multi_food(self, list_food):
+        from app_arca.models.mother.Food import Food
         try:            
             if not all(isinstance(food, Food) for food in list_food):
                 raise TypeError("Todos los elementos de 'list_food' deben ser instancias de la clase Food.")
@@ -121,6 +126,7 @@ class Ark:
         }
 
     def search_list_suitable_food(food, animal_type):
+        from app_arca.models.mother.Food import Food
         if not isinstance(food, Food):
             raise TypeError("El parámetro 'food' debe ser de la clase Food.")
 
@@ -132,14 +138,16 @@ class Ark:
 
         return is_suitable.get(animal_type, lambda _: False)(food)
         
-    def alimentar(self, animal):    
+    def alimentar(self, animal):  
+        from app_arca.models.mother.Animal import Animal
+        from app_arca.models.mother.Food import Food  
         if not animal.hunger:
             return self.foods
         if len(self.foods) <= 0:
             return self.foods
 
         calorias_necesarias = animal.size
-        suitable_foods = [food for food in self.foods if Ark.search_list_suitable_food(food, animal.tipo)]
+        suitable_foods = [food for food in self.foods if Ark.search_list_suitable_food(food, Animal(animal.name).animal_type)]
 
         for food in suitable_foods:
             if calorias_necesarias <= 0:

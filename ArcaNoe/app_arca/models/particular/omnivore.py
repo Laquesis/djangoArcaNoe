@@ -1,7 +1,7 @@
 import random
 import threading
-from models.mother.Animal import Animal
-from models.mother.Food import Food
+from app_arca.models.mother.Animal import Animal
+from app_arca.models.mother.Food import Food
 
 class Omnivore(Animal):
     def __init__(self, name, hunger=False, thirst=False, size=1, sentiment=0, sex=None):      
