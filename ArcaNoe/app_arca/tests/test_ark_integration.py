@@ -7,9 +7,61 @@ from app_arca.models.particular.meat import Meat
 from app_arca.models.mother.Food import Food
 from app_arca.models.mother.Ark import Ark
 from app_arca.models.mother.Animal import Animal
+import random
 
 class ArkIntegrationTestCase(TestCase):
+    def test_run_cyclic_integration(self):
+        print("=== TEST 1===")
+        print("=== INICIO DE LA SIMULACIÓN DEL ARCA ===")
+
+        # Inicializar el arca con capacidad limitada
+        ark = Ark(max_capacity={"animal": 10, "food": 10, "water": 1000})
+
+        # Añadir recursos iniciales
+        ark.add_food(Vegetables(name="zanahoria",calorias=200,caducidad=4))
+        ark.add_food(Meat(name="pavo",calorias=500,caducidad=2))
+        ark.add_water(500)
+        
+        # Ciclo de simulación
+        cycle = 1
+        animals = []
+        while True:
+            print(f"=== Ciclo {cycle} ===")
+            
+            # Generar nuevos animales aleatoriamente si hay espacio
+            if len(animals) < ark.max_capacity["animal"]:
+                new_animal_type = random.choice(["Herbivore", "Carnivore", "Omnivore"])
+                if new_animal_type == "Herbivore":
+                    animals.append(Herbivore(name=f"Herbivore{cycle}", hunger=True, thirst=True,sentiment=random.randint(1, 8), size=random.randint(1, 10),sex=random.randint(0,1)))
+                elif new_animal_type == "Carnivore":
+                    animals.append(Carnival(name=f"Carnivore{cycle}", hunger=True, thirst=True,sentiment=random.randint(1, 8) ,size=random.randint(1, 10),sex=random.randint(0,1)))
+                elif new_animal_type == "Omnivore":
+                    animals.append(Omnivore(name=f"Omnivore{cycle}", hunger=True, thirst=True,sentiment=random.randint(1, 8), size=random.randint(1, 10),sex=random.randint(0,1)))
+                print(f"Añadido {new_animal_type}")
+
+            # Alimentar y dar de beber a los animales
+            for animal in animals[:]:  # Iterar sobre una copia para permitir eliminación
+                ark.alimentar(animal)
+                ark.dar_agua(animal)
+                # Eliminar animales que no sobrevivieron por falta de recursos
+                if animal.hunger or animal.thirst:
+                    print(f"{animal.name} ha muerto por falta de recursos")
+                    animals.remove(animal)
+            
+            # Verificar estado del arca
+            ark_status = ark.get_status()
+            print("Animales en el arca:", ark_status["animals"])
+            print("Comida restante en el arca:", ark_status["food"])
+            print("Agua restante en el arca:", ark_status["water"])
+
+            # Condición de fin del ciclo
+            if not animals or ark_status["food"] <= 0 or ark_status["water"] <= 0:
+                print("=== FIN DE LA SIMULACIÓN DEL ARCA ===")
+                break
+            
+            cycle += 1
     def test_run_integration(self):
+        print("=== TEST 2 ===")
         print("=== INICIO DE LA SIMULACIÓN DEL ARCA ===")
 
         # Inicializar el arca con capacidad limitada
