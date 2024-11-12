@@ -3,7 +3,7 @@ import threading
 from app_arca.models.mother.Animal import Animal
 
 class Herbivore(Animal):
-    def __init__(self, name, hunger=False, thirst=False, size=1, sentiment=0, sex=None):      
+    def __init__(self, name, hunger=False, thirst=False, size=1, sentiment=None, sex=None):      
         super().__init__(name, animal_type=0, hunger=hunger, thirst=thirst, size=size, sentiment=sentiment, sex=sex)
     
     def feed(self):
