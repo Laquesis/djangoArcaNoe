@@ -1,4 +1,3 @@
-
 from mother.Animal import Animal
 from mother.Ark import Ark
 import random

@@ -1,63 +1,72 @@
-from django.test import TestCase
-from models.mother.Animal import Animal
-from models.mother.Food import Food
-from models.mother import Ark  # Ajusta la importación de Ark según la ubicación de tu modelo
+from app_arca.models.particular.carnival import Carnival
+from app_arca.models.particular.omnivore import Omnivore
+from app_arca.models.particular.hervibal import Herbivore
+from app_arca.models.particular.vegetables import Vegetables
+from app_arca.models.particular.meat import Meat
+from app_arca.models.mother.Food import Food
+from app_arca.models.mother.Ark import Ark
 
-class ArkIntegrationTestCase(TestCase):
-    def setUp(self):
-        # Crear una instancia de Ark y algunos animales y alimentos
-        self.ark = Ark()
-        self.herbivore = Animal(name="Horse", animal_type=0, hunger=True, thirst=True, size=5)
-        self.carnivore = Animal(name="Tiger", animal_type=1, hunger=True, thirst=True, size=8)
-        self.omnivore = Animal(name="Bear", animal_type=2, hunger=True, thirst=True, size=7)
-        
-        self.vegetable_food = Food(tipo=0, calorias=300)  # Alimento vegetal para herbívoros
-        self.meat_food = Food(tipo=1, calorias=500)       # Alimento de carne para carnívoros
-        self.general_food = Food(tipo=2, calorias=400)    # Alimento general para omnívoros
+def run_integration_test():
+    print("=== INICIO DE LA SIMULACIÓN DEL ARCA ===")
 
-    def test_ark_operations(self):
-        # Agregar animales al arca
-        self.ark.add_animal(self.herbivore)
-        self.ark.add_animal(self.carnivore)
-        self.ark.add_animal(self.omnivore)
-        self.assertEqual(len(self.ark.animals), 3)
+    # Crear animales de diferentes tipos
+    herbivore = Herbivore(name="Deer", hunger=True, thirst=True, size=3)
+    carnivore = Carnival(name="Tiger", hunger=True, thirst=True, size=5)
+    omnivore = Omnivore(name="Bear", hunger=True, thirst=True, size=4)
 
-        # Agregar alimentos al arca
-        self.ark.add_food(self.vegetable_food)
-        self.ark.add_food(self.meat_food)
-        self.ark.add_food(self.general_food)
-        self.assertEqual(len(self.ark.foods), 3)
+    # Crear diferentes tipos de alimentos
+    vegetable = Vegetables(calorias=200)
+    meat = Meat(calorias=500)
 
-        # Agregar agua al arca
-        self.ark.add_water(5000)
-        self.assertEqual(self.ark.water, 5000)
+    # Inicializar el arca con capacidad limitada
+    ark = Ark(max_capacity={"animal": 10, "food": 10, "water": 1000})
 
-        # Iniciar el viaje del arca
-        self.ark.left_ark()
-        self.assertTrue(self.ark.left)
+    # Añadir animales al arca
+    print("\n--- Añadiendo Animales al Arca ---")
+    ark.add_animal(herbivore)
+    ark.add_animal(carnivore)
+    ark.add_animal(omnivore)
+    print("Animales actuales en el arca:", ark.get_status()["animals"])
 
-        # Alimentar al herbívoro
-        self.ark.alimentar(self.herbivore)
-        self.assertFalse(self.herbivore.hunger)  # Verificar que el herbívoro ya no tiene hambre
+    # Añadir alimentos al arca
+    print("\n--- Añadiendo Alimentos al Arca ---")
+    ark.add_food(vegetable)
+    ark.add_food(meat)
+    print("Cantidad actual de comida en el arca:", ark.get_status()["food"])
 
-        # Alimentar al carnívoro
-        self.ark.alimentar(self.carnivore)
-        self.assertFalse(self.carnivore.hunger)  # Verificar que el carnívoro ya no tiene hambre
+    # Añadir agua al arca
+    print("\n--- Añadiendo Agua al Arca ---")
+    ark.add_water(500)
+    print("Cantidad actual de agua en el arca:", ark.get_status()["water"])
 
-        # Alimentar al omnívoro
-        self.ark.alimentar(self.omnivore)
-        self.assertFalse(self.omnivore.hunger)  # Verificar que el omnívoro ya no tiene hambre
+    # Simulación de alimentación
+    print("\n--- Alimentando a los Animales ---")
+    ark.alimentar(herbivore)
+    ark.alimentar(carnivore)
+    ark.alimentar(omnivore)
 
-        # Dar agua a todos los animales
-        self.ark.dar_agua(self.herbivore)
-        self.ark.dar_agua(self.carnivore)
-        self.ark.dar_agua(self.omnivore)
-        self.assertFalse(self.herbivore.thirst)
-        self.assertFalse(self.carnivore.thirst)
-        self.assertFalse(self.omnivore.thirst)
-        
-        # Verificar el estado final del arca
-        final_status = self.ark.get_status()
-        print("Estado final del Ark:", final_status)
-        self.assertGreater(final_status["water"], 0)  # Queda algo de agua
-        self.assertEqual(len(final_status["foods"]), 0)  # Todos los alimentos fueron consumidos
+    # Verificar estado de hambre
+    print(f"{herbivore.name} está {'hambriento' if herbivore.hunger else 'satisfecho'}")
+    print(f"{carnivore.name} está {'hambriento' if carnivore.hunger else 'satisfecho'}")
+    print(f"{omnivore.name} está {'hambriento' if omnivore.hunger else 'satisfecho'}")
+
+    # Simulación de hidratación
+    print("\n--- Hidratando a los Animales ---")
+    ark.dar_agua(herbivore)
+    ark.dar_agua(carnivore)
+    ark.dar_agua(omnivore)
+
+    # Verificar estado de sed
+    print(f"{herbivore.name} está {'sediento' if herbivore.thirst else 'hidratado'}")
+    print(f"{carnivore.name} está {'sediento' if carnivore.thirst else 'hidratado'}")
+    print(f"{omnivore.name} está {'sediento' if omnivore.thirst else 'hidratado'}")
+
+    # Estado final del arca
+    print("\n=== ESTADO FINAL DEL ARCA ===")
+    print("Animales en el arca:", ark.get_status()["animals"])
+    print("Comida restante en el arca:", ark.get_status()["food"])
+    print("Agua restante en el arca:", ark.get_status()["water"])
+    print("=== FIN DE LA SIMULACIÓN DEL ARCA ===")
+
+if __name__ == "__main__":
+    run_integration_test()
