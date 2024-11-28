@@ -48,15 +48,15 @@ class ArkIntegrationTestCase(TestCase):
             print("Comida restante en el arca:", ark_status["food"])
             print("Agua restante en el arca:", ark_status["water"])
             # Alimentar y dar de beber a los animales
-            for animal in ark.animals:
-                print(animal)
+            #for animal in ark.animals:
+            #   print(animal)
             for animal in ark.animals:  # Iterar sobre una copia para permitir eliminación
                 ark.alimentar(animal)
-                ark.dar_agua(animal)
-                # Eliminar animales que no sobrevivieron por falta de recursos
-                #if animal.hunger or animal.thirst:
-                 #   print(f"{animal.name} ha muerto por falta de recursos")
-                  #  animals.remove(animal)
+                ark.dar_agua(animal)              
+                print(animal)
+            ark.eliminarMuertos()
+            ark.eliminarCaducados()
+            
 
             
             # Verificar estado del arca

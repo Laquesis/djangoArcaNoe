@@ -164,9 +164,7 @@ class Ark:
             if calorias_necesarias <= 0:
                 break
             if food.calorias <= calorias_necesarias:
-                calorias_necesarias -= food.calorias                
-                #self.foods=[food_ for food_ in self.foods if food_.id !=food.id]
-                #self.foods = list(filter(lambda food_: food_.id != food.id, self.foods))
+                calorias_necesarias -= food.calorias              
                 print(len(self.foods))
                 self.foods.remove(food)                
             else:
@@ -175,27 +173,45 @@ class Ark:
 
         if calorias_necesarias > 0:
             animal.set_hunger(True)
-            animal.death()
-            #self.animals = list(filter(lambda animal_: animal_.id != animal.id, self.animals))
-            print(len(self.animals))
-            self.animals.remove(animal)            
-            print(f"{animal.name} ha muerto por falta de recursos.")
+            animal.death()            
+            print(len(self.animals))                     
+            print(f"{animal.name} ha muerto por falta de comida.")
         else:
             animal.set_hunger(False)
             print(f"{animal.name} se ha alimentado.")
 
         self.tiempo += 1
         if self.tiempo == 5:
-            Food.eliminar_caducados(self.foods)
+            for alimento in self.foods:
+                alimento.caducar()  
             self.tiempo = 0
-  
+
+    def caducar(self):  
+        from app_arca.models.mother.Food import Food
+        # Restar 1 a la caducidad de cada alimento en self.Ark.foods
+        for food in self.foods:
+            food.caducidad -= 1  
+        
+
     def dar_agua(self, animal):
-        if animal.thirst == True and self.water > (animal.size):
-            self.water -= (animal.size)
+        if animal.thirst == True and self.water > 1:
+            self.water -= 1
             animal.thirst = False   
             print(f"{animal.name} ha bebido")    
         else:
             self.water = 0
             animal.thirst = True
-            animal.is_alive = False
-            print(f"{animal.name} ha muerto por falta de recursos")
+            animal.is_alive = False            
+            print(f"{animal.name} ha muerto por falta de agua")
+
+    def eliminarMuertos(self):
+        from app_arca.models.mother.Animal import Animal
+        for animal in self.animals:
+            if animal.is_alive==False:
+                self.animals.remove(animal)
+
+    def eliminarCaducados(self):
+        from app_arca.models.mother.Food import Food
+        for food in self.foods:
+            if food.caducidad==0:
+                self.foods.remove(food)

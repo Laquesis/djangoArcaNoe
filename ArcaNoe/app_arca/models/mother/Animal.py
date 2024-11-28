@@ -1,12 +1,13 @@
 
 import random
 import threading
-import uuid
+import shortuuid
 
+short_id = shortuuid.ShortUUID().random(length=4)
 class Animal:
     def __init__(self, name, animal_type=0, hunger=False, thirst=False, size=1, sentiment=0, sex=None):
-        # Validate type
-        self.id=uuid.uuid1() 
+        # Validate type       
+        self.id= shortuuid.ShortUUID().random(length=4)
         if isinstance(animal_type, int) and animal_type in [0, 1, 2]:
             self.animal_type = animal_type
         else:
@@ -128,9 +129,7 @@ class Animal:
 
     def death(self):
         from app_arca.models.mother.Ark import Ark
-        self.is_alive = False
-        
-             
+        self.is_alive = False              
 
     
     def get_sentiment(self):

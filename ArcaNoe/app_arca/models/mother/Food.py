@@ -1,7 +1,7 @@
 #from app_arca.models.mother.Animal import Animal
 #from app_arca.models.mother.Ark import Ark
 import random
-import uuid
+import shortuuid
 
 class Food:
     # Tipos de alimento
@@ -9,9 +9,10 @@ class Food:
     # animal = 1
 
     def __init__(self, name, tipo=None, calorias=None, caducidad=None):
-        # Validación de tipo de dato para cada atributo
-        try:
-            self.id=uuid.uuid1()          
+        # Validación de tipo de dato para cada atributo     
+        # Validate type
+        self.id= shortuuid.ShortUUID().random(length=4)
+        try:                     
             if not isinstance(name, str):
                 raise TypeError("El nombre debe ser una cadena de texto.")
             self.name = name
@@ -29,6 +30,7 @@ class Food:
             self.caducidad = caducidad
         except TypeError as e:
             print(f"Error al crear el alimento: {e}")
+
     def __eq__(self, other):
         if isinstance(other, Food):  # Verifica que sea de la misma clase
             return self.id == other.id  # Comparación basada en el atributo `id`
@@ -61,15 +63,8 @@ class Food:
         except TypeError as e:
             print(f"Error al crear el alimento: {e}")
 
-    def eliminar_caducados(foods):  
-        from app_arca.models.mother.Ark import Ark 
-        # Restar 1 a la caducidad de cada alimento en self.Ark.foods
-        for food in foods:
-            food.caducidad -= 1
-
-        # Eliminar los alimentos cuya caducidad es 0 dentro de self.Ark.foods
-        Ark.foods = [food for food in foods if food.caducidad > 0]
-
+    def caducar(self):         
+        self.caducidad -= 1
 
 
     def __str__(self):
