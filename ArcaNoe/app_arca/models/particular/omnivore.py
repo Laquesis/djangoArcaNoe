@@ -5,7 +5,7 @@ from app_arca.models.mother.Food import Food
 
 class Omnivore(Animal):
     def __init__(self, name, hunger=False, thirst=False, size=1, sentiment=0, sex=None):      
-        super().__init__(name, animal_type=0, hunger=hunger, thirst=thirst, size=size, sentiment=sentiment, sex=sex)
+        super().__init__(name, animal_type=2, hunger=hunger, thirst=thirst, size=size, sentiment=sentiment, sex=sex)
     
     def feed(self,alimento):
         if self.hunger:

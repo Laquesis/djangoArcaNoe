@@ -1,5 +1,5 @@
-#from app_arca.models.mother.Animal import Animal
-#from app_arca.models.mother.Food import Food
+#from Animal import Animal
+#from Food import Food
 
 class Ark:
     def __init__(self, animals=None, foods=None, water=None, max_capacity=None, left=False, tiempo=None):
@@ -140,42 +140,55 @@ class Ark:
         
     def alimentar(self, animal):  
         from app_arca.models.mother.Animal import Animal
-        from app_arca.models.mother.Food import Food  
-        if not animal.hunger:
-            return self.foods
+        from app_arca.models.mother.Food import Food 
+   
+        if not isinstance(animal, Animal):
+            raise ValueError("El parámetro 'animal' debe ser una instancia válida de Animal.")
+        
+        animal_instance = animal
+        if not animal_instance.hunger:
+            return None
+
         if len(self.foods) <= 0:
-            return self.foods
+            return None
 
-        calorias_necesarias = animal.size
-        suitable_foods = [food for food in self.foods if Ark.search_list_suitable_food(food, Animal(animal.name).animal_type)]
+        calorias_necesarias = animal_instance.size
+        suitable_foods = [
+            food for food in self.foods 
+            if Ark.search_list_suitable_food(food, animal_instance.animal_type)
+        ]
 
-        for food in suitable_foods:
+        for food in suitable_foods[:]:
             if calorias_necesarias <= 0:
                 break
+
             if food.calorias <= calorias_necesarias:
                 calorias_necesarias -= food.calorias
                 self.foods.remove(food)
             else:
                 food.calorias -= calorias_necesarias
                 calorias_necesarias = 0
-        
-        if calorias_necesarias > 0:
-            animal.hunger = True
-            animal.is_alive = False          
-        else:
-            animal.hunger = False
-        
-        self.tiempo += 1
 
+        if calorias_necesarias > 0:
+            animal_instance.set_hunger(True)
+            animal_instance.death()
+            print(f"{animal_instance.name} ha muerto por falta de recursos.")
+        else:
+            animal_instance.set_hunger(False)
+            print(f"{animal_instance.name} se ha alimentado.")
+
+        self.tiempo += 1
         if self.tiempo == 5:
-            Food.eliminar_caducados()
-            self.tiempo = 0      
+            Food.eliminar_caducados(ark=self)
+            self.tiempo = 0
   
     def dar_agua(self, animal):
         if animal.thirst == True and self.water > (animal.size):
             self.water -= (animal.size)
-            animal.thirst = False       
+            animal.thirst = False   
+            print(f"{animal.name} ha bebido")    
         else:
             self.water = 0
             animal.thirst = True
             animal.is_alive = False
+            print(f"{animal.name} ha muerto por falta de recursos")

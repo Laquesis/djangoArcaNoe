@@ -2,13 +2,9 @@ from app_arca.models.mother.Animal import Animal
 from app_arca.models.particular.meat import Meat
 from app_arca.models.mother.Food import Food
 class Carnival(Animal):
-    def __init__(self , name : str, hunger : bool , thirst : bool, type=1):
-        self.name = name
-        self.hunger = hunger
-        self.thirst = thirst
-        self.type = type 
-        self._meat_portion_per_meal = 10
-        self._water_per_drink = 0.5
+    def __init__(self, name,  animal_type=None, hunger=None, thirst=None, size=None, sentiment=None , sex=None):
+        super().__init__(name, animal_type=1, hunger=False, thirst=False, size=size, sentiment=sentiment, sex=sex)     
+     
     def feed(self, food : Food):
         if isinstance(food , Meat) :
             if self.hunger == True:

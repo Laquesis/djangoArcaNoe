@@ -26,7 +26,7 @@ class ArkIntegrationTestCase(TestCase):
         while True:
             print(f"=== Ciclo {cycle} ===")
             if inicio==True:
-                for i in range(50):
+                for i in range(50):             
                     ark.add_food(Vegetables(name=f"vegetal{i}",calorias=200,caducidad=4))
                     ark.add_food(Meat(name=f"carne{i}",calorias=500,caducidad=2))
                 ark.add_water(1000)
@@ -34,22 +34,28 @@ class ArkIntegrationTestCase(TestCase):
                     if len(animals) < ark.max_capacity["animal"]:
                         new_animal_type = random.choice(["Herbivore", "Carnivore", "Omnivore"])
                         if new_animal_type == "Herbivore":
-                            ark.add_animal(Herbivore(name=f"Herbivore{i}", hunger=True, thirst=True,sentiment=random.randint(1, 8), size=random.randint(1, 10),sex=random.randint(0,1)))
+                            ark.add_animal(Herbivore(name=f"Herbivore{str(i)}", hunger=True, thirst=True,sentiment=random.randint(1, 8), size=random.randint(1, 10),sex=random.randint(0,1)))
                         elif new_animal_type == "Carnivore":
-                            ark.add_animal(Carnival(name=f"Carnivore{i}", hunger=True, thirst=True,sentiment=random.randint(1, 8) ,size=random.randint(1, 10),sex=random.randint(0,1)))
+                            ark.add_animal(Carnival(name=f"Carnivore{str(i)}", hunger=True, thirst=True,sentiment=random.randint(1, 8) ,size=random.randint(1, 10),sex=random.randint(0,1)))
                         elif new_animal_type == "Omnivore":
-                            ark.add_animal(Omnivore(name=f"Omnivore{i}", hunger=True, thirst=True,sentiment=random.randint(1, 8), size=random.randint(1, 10),sex=random.randint(0,1)))
+                            ark.add_animal(Omnivore(name=f"Omnivore{str(i)}", hunger=True, thirst=True,sentiment=random.randint(1, 8), size=random.randint(1, 10),sex=random.randint(0,1)))
                         print(f"Añadido {new_animal_type}")
                 inicio=False
-
+            ark_status = ark.get_status()
+            print("Animales en el arca:", ark_status["animals"])
+            print("Comida restante en el arca:", ark_status["food"])
+            print("Agua restante en el arca:", ark_status["water"])
             # Alimentar y dar de beber a los animales
-            for animal in animals[:]:  # Iterar sobre una copia para permitir eliminación
+            for animal in ark.animals:
+                print(animal)
+            for animal in ark.animals:  # Iterar sobre una copia para permitir eliminación
                 ark.alimentar(animal)
                 ark.dar_agua(animal)
                 # Eliminar animales que no sobrevivieron por falta de recursos
-                if animal.hunger or animal.thirst:
-                    print(f"{animal.name} ha muerto por falta de recursos")
-                    animals.remove(animal)
+                #if animal.hunger or animal.thirst:
+                 #   print(f"{animal.name} ha muerto por falta de recursos")
+                  #  animals.remove(animal)
+
             
             # Verificar estado del arca
             ark_status = ark.get_status()
@@ -58,8 +64,12 @@ class ArkIntegrationTestCase(TestCase):
             print("Agua restante en el arca:", ark_status["water"])
 
             # Condición de fin del ciclo
-            if not animals or ark_status["food"] <= 0 or ark_status["water"] <= 0:
+            if ark_status["animals"]<=0 or ark_status["food"] <= 0 or ark_status["water"] <= 0 or cycle==50:
                 print("=== FIN DE LA SIMULACIÓN DEL ARCA ===")
+                ark_status = ark.get_status()
+                print("Animales en el arca:", ark_status["animals"])
+                print("Comida restante en el arca:", ark_status["food"])
+                print("Agua restante en el arca:", ark_status["water"])
                 break
             
             cycle += 1
@@ -70,9 +80,9 @@ class ArkIntegrationTestCase(TestCase):
         # Inicializar el arca con capacidad limitada
         ark = Ark(max_capacity={"animal": 10, "food": 10, "water": 1000})
         
-        herbivore = Animal(name="Deer", animal_type=0, hunger=True, thirst=True, size=3, sentiment=1, sex=0)
-        carnivore = Animal(name="Tiger", animal_type=1, hunger=True, thirst=True, size=5, sentiment=2, sex=1)
-        omnivore = Animal(name="Bear", animal_type=2, hunger=True, thirst=True, size=4, sentiment=1, sex=0)
+        herb = Herbivore(name="Deer",  hunger=True, thirst=True, size=3, sentiment=1, sex=0)
+        carn = Carnival(name="Tiger",  hunger=True, thirst=True, size=5, sentiment=2, sex=1)
+        omni = Omnivore(name="Bear",  hunger=True, thirst=True, size=4, sentiment=1, sex=0)
 
         # Crear diferentes tipos de alimentos
         vegetable = Vegetables(name="zanahora",calorias=200,caducidad=7)
@@ -81,9 +91,9 @@ class ArkIntegrationTestCase(TestCase):
       
         # Añadir animales al arca
         print("\n--- Añadiendo Animales al Arca ---")
-        ark.add_animal(herbivore)
-        ark.add_animal(carnivore)
-        ark.add_animal(omnivore)
+        ark.add_animal(herb)
+        ark.add_animal(carn)
+        ark.add_animal(omni)
         print("Animales actuales en el arca:", ark.get_status()["animals"])
 
         # Añadir alimentos al arca
@@ -99,25 +109,25 @@ class ArkIntegrationTestCase(TestCase):
 
         # Simulación de alimentación
         print("\n--- Alimentando a los Animales ---")
-        ark.alimentar(herbivore)
-        ark.alimentar(carnivore)
-        ark.alimentar(omnivore)
+        ark.alimentar(herb)
+        ark.alimentar(carn)
+        ark.alimentar(omni)
 
         # Verificar estado de hambre
-        print(f"{herbivore.name} está {'hambriento' if herbivore.hunger else 'satisfecho'}")
-        print(f"{carnivore.name} está {'hambriento' if carnivore.hunger else 'satisfecho'}")
-        print(f"{omnivore.name} está {'hambriento' if omnivore.hunger else 'satisfecho'}")
+        print(f"{herb.name} está {'hambriento' if herb.hunger else 'satisfecho'}")
+        print(f"{carn.name} está {'hambriento' if carn.hunger else 'satisfecho'}")
+        print(f"{omni.name} está {'hambriento' if omni.hunger else 'satisfecho'}")
 
         # Simulación de hidratación
         print("\n--- Hidratando a los Animales ---")
-        ark.dar_agua(herbivore)
-        ark.dar_agua(carnivore)
-        ark.dar_agua(omnivore)
+        ark.dar_agua(herb)
+        ark.dar_agua(carn)
+        ark.dar_agua(omni)
 
         # Verificar estado de sed
-        print(f"{herbivore.name} está {'sediento' if herbivore.thirst else 'hidratado'}")
-        print(f"{carnivore.name} está {'sediento' if carnivore.thirst else 'hidratado'}")
-        print(f"{omnivore.name} está {'sediento' if omnivore.thirst else 'hidratado'}")
+        print(f"{herb.name} está {'sediento' if herb.thirst else 'hidratado'}")
+        print(f"{carn.name} está {'sediento' if carn.thirst else 'hidratado'}")
+        print(f"{omni.name} está {'sediento' if omni.thirst else 'hidratado'}")
 
         # Estado final del arca
         print("\n=== ESTADO FINAL DEL ARCA ===")

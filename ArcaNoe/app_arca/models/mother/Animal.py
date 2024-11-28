@@ -55,7 +55,7 @@ class Animal:
 
 
         self.is_alive = True
-        threading.Timer(30, self.set_hunger).start()
+        threading.Timer(30, self.set_hunger , args=(True,)).start()
         threading.Timer(30, self.set_thirst).start()
         threading.Timer(120, self.death).start()
 
@@ -88,9 +88,12 @@ class Animal:
            raise ValueError("Name must be a string")
         
         
-    def set_hunger(self):
-        self.hunger = True
-        print(f"{self.name} is hungry.\n")
+    def set_hunger(self,hambriento:bool):
+        self.hunger = hambriento
+        if hambriento==True:
+            print(f"{self.name}  is hungry.\n")
+        else:            
+            print(f"{self.name} is not hungry.\n")
 
 
     def set_thirst(self):
@@ -144,7 +147,7 @@ class Animal:
             print(f"{self.name} has been fed.")
         else:
             print(f"{self.name} is not hungry.")
-        threading.Timer(5, self.set_hunger).start()
+        threading.Timer(5, self.set_hunger, args=(True,)).start()
 
     def water(self):
         if self.is_alive == False:
