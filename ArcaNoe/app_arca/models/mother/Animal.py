@@ -1,10 +1,12 @@
 
 import random
 import threading
+import uuid
 
 class Animal:
     def __init__(self, name, animal_type=0, hunger=False, thirst=False, size=1, sentiment=0, sex=None):
         # Validate type
+        self.id=uuid.uuid1() 
         if isinstance(animal_type, int) and animal_type in [0, 1, 2]:
             self.animal_type = animal_type
         else:
@@ -59,10 +61,17 @@ class Animal:
         threading.Timer(30, self.set_thirst).start()
         threading.Timer(120, self.death).start()
 
+    #def __eq__(self, other):
+    #    if isinstance(other, Animal):  # Verifica que sea de la misma clase
+    #        return self.id == other.id  # Comparación basada en el atributo `id`
+    #    return False  # Si no es de la misma clase, no son iguales
+    def __eq__(self, other):
+        return isinstance(other, Animal) and self.id == other.id and self.name == other.name
 
     def __str__(self):
         # Provide string representation of the Animal object
         return (
+            f"id: {self.id}\n"
             f"Name: {self.name}\n"
             f"Type: {'Herbivore' if self.animal_type == 0 else 'Carnivore' if self.animal_type == 1 else 'Omnivore'}\n"
             f"Size: {self.size}\n"
@@ -118,7 +127,10 @@ class Animal:
    
 
     def death(self):
+        from app_arca.models.mother.Ark import Ark
         self.is_alive = False
+        
+             
 
     
     def get_sentiment(self):

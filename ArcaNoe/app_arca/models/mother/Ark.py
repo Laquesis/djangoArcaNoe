@@ -43,6 +43,7 @@ class Ark:
             self.tiempo = tiempo
         except TypeError as e:
             print(f"Error en la inicialización de Ark: {e}")
+  
 
     def left_ark(self):
         try:            
@@ -145,41 +146,47 @@ class Ark:
         if not isinstance(animal, Animal):
             raise ValueError("El parámetro 'animal' debe ser una instancia válida de Animal.")
         
-        animal_instance = animal
-        if not animal_instance.hunger:
+
+        if not animal.hunger:
             return None
 
         if len(self.foods) <= 0:
             return None
 
-        calorias_necesarias = animal_instance.size
+        calorias_necesarias = animal.size
         suitable_foods = [
             food for food in self.foods 
-            if Ark.search_list_suitable_food(food, animal_instance.animal_type)
+            if Ark.search_list_suitable_food(food, animal.animal_type)
         ]
 
         for food in suitable_foods[:]:
+            #print(food)
             if calorias_necesarias <= 0:
                 break
-
             if food.calorias <= calorias_necesarias:
-                calorias_necesarias -= food.calorias
-                self.foods.remove(food)
+                calorias_necesarias -= food.calorias                
+                #self.foods=[food_ for food_ in self.foods if food_.id !=food.id]
+                #self.foods = list(filter(lambda food_: food_.id != food.id, self.foods))
+                print(len(self.foods))
+                self.foods.remove(food)                
             else:
                 food.calorias -= calorias_necesarias
                 calorias_necesarias = 0
 
         if calorias_necesarias > 0:
-            animal_instance.set_hunger(True)
-            animal_instance.death()
-            print(f"{animal_instance.name} ha muerto por falta de recursos.")
+            animal.set_hunger(True)
+            animal.death()
+            #self.animals = list(filter(lambda animal_: animal_.id != animal.id, self.animals))
+            print(len(self.animals))
+            self.animals.remove(animal)            
+            print(f"{animal.name} ha muerto por falta de recursos.")
         else:
-            animal_instance.set_hunger(False)
-            print(f"{animal_instance.name} se ha alimentado.")
+            animal.set_hunger(False)
+            print(f"{animal.name} se ha alimentado.")
 
         self.tiempo += 1
         if self.tiempo == 5:
-            Food.eliminar_caducados(ark=self)
+            Food.eliminar_caducados(self.foods)
             self.tiempo = 0
   
     def dar_agua(self, animal):

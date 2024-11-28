@@ -8,6 +8,7 @@ from app_arca.models.mother.Food import Food
 from app_arca.models.mother.Ark import Ark
 from app_arca.models.mother.Animal import Animal
 import random
+import time
 
 class ArkIntegrationTestCase(TestCase):
     def test_run_cyclic_integration(self):
@@ -41,6 +42,7 @@ class ArkIntegrationTestCase(TestCase):
                             ark.add_animal(Omnivore(name=f"Omnivore{str(i)}", hunger=True, thirst=True,sentiment=random.randint(1, 8), size=random.randint(1, 10),sex=random.randint(0,1)))
                         print(f"Añadido {new_animal_type}")
                 inicio=False
+            
             ark_status = ark.get_status()
             print("Animales en el arca:", ark_status["animals"])
             print("Comida restante en el arca:", ark_status["food"])
@@ -58,21 +60,24 @@ class ArkIntegrationTestCase(TestCase):
 
             
             # Verificar estado del arca
-            ark_status = ark.get_status()
-            print("Animales en el arca:", ark_status["animals"])
-            print("Comida restante en el arca:", ark_status["food"])
-            print("Agua restante en el arca:", ark_status["water"])
+           
+            ark_status2 = ark.get_status()
+            print("Animales en el arca:", ark_status2["animals"])
+            print("Comida restante en el arca:", ark_status2["food"])
+            print("Agua restante en el arca:", ark_status2["water"])
 
             # Condición de fin del ciclo
-            if ark_status["animals"]<=0 or ark_status["food"] <= 0 or ark_status["water"] <= 0 or cycle==50:
-                print("=== FIN DE LA SIMULACIÓN DEL ARCA ===")
-                ark_status = ark.get_status()
-                print("Animales en el arca:", ark_status["animals"])
-                print("Comida restante en el arca:", ark_status["food"])
-                print("Agua restante en el arca:", ark_status["water"])
+            if ark_status2["animals"]<=0 or ark_status2["food"] <= 0 or ark_status2["water"] <= 0 or cycle==50:
+                print("=== FIN DE LA SIMULACIÓN DEL ARCA ===")             
                 break
             
             cycle += 1
+        time.sleep(30)
+        ark_status3 = ark.get_status()
+        print("Animales en el arca:", ark_status3["animals"])
+        print("Comida restante en el arca:", ark_status3["food"])
+        print("Agua restante en el arca:", ark_status3["water"])
+        
     def test_run_integration(self):
         print("=== TEST 2 ===")
         print("=== INICIO DE LA SIMULACIÓN DEL ARCA ===")

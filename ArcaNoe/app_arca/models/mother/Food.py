@@ -1,6 +1,7 @@
 #from app_arca.models.mother.Animal import Animal
 #from app_arca.models.mother.Ark import Ark
 import random
+import uuid
 
 class Food:
     # Tipos de alimento
@@ -10,6 +11,7 @@ class Food:
     def __init__(self, name, tipo=None, calorias=None, caducidad=None):
         # Validación de tipo de dato para cada atributo
         try:
+            self.id=uuid.uuid1()          
             if not isinstance(name, str):
                 raise TypeError("El nombre debe ser una cadena de texto.")
             self.name = name
@@ -27,6 +29,10 @@ class Food:
             self.caducidad = caducidad
         except TypeError as e:
             print(f"Error al crear el alimento: {e}")
+    def __eq__(self, other):
+        if isinstance(other, Food):  # Verifica que sea de la misma clase
+            return self.id == other.id  # Comparación basada en el atributo `id`
+        return False  # Si no es de la misma clase, no son iguales
 
     def crear_alimento(self,food):
         from app_arca.models.mother.Ark import Ark
@@ -55,18 +61,25 @@ class Food:
         except TypeError as e:
             print(f"Error al crear el alimento: {e}")
 
-    def eliminar_caducados(self,ark):  
+    def eliminar_caducados(foods):  
         from app_arca.models.mother.Ark import Ark 
         # Restar 1 a la caducidad de cada alimento en self.Ark.foods
-        for food in Ark(ark).foods:
-            Food(food).caducidad -= 1
+        for food in foods:
+            food.caducidad -= 1
 
         # Eliminar los alimentos cuya caducidad es 0 dentro de self.Ark.foods
-        Ark(ark).foods = [food for food in Ark(ark).foods if Food(food).caducidad > 0]
+        Ark.foods = [food for food in foods if food.caducidad > 0]
 
 
-    def print_food(self):
-        print(self.name , self.tipo , self.calorias , self.caducidad)
+
+    def __str__(self):
+        # Provide string representation of the Animal object
+        return (
+            f"Name: {self.name}\n"
+            f"Tipo: {'Vegetable' if self.tipo== 0 else 'Carne' }\n"
+            f"Calorias: {self.calorias}\n"
+            f"Caducidad: {self.caducidad}\n"         
+        )
 
    
                 
