@@ -15,29 +15,32 @@ class ArkIntegrationTestCase(TestCase):
         print("=== INICIO DE LA SIMULACIÓN DEL ARCA ===")
 
         # Inicializar el arca con capacidad limitada
-        ark = Ark(max_capacity={"animal": 10, "food": 10, "water": 1000})
+        ark = Ark(max_capacity={"animal": 50, "food": 100, "water": 1000})
 
         # Añadir recursos iniciales
-        ark.add_food(Vegetables(name="zanahoria",calorias=200,caducidad=4))
-        ark.add_food(Meat(name="pavo",calorias=500,caducidad=2))
-        ark.add_water(500)
-        
+      
         # Ciclo de simulación
         cycle = 1
         animals = []
+        inicio=True
         while True:
             print(f"=== Ciclo {cycle} ===")
-            
-            # Generar nuevos animales aleatoriamente si hay espacio
-            if len(animals) < ark.max_capacity["animal"]:
-                new_animal_type = random.choice(["Herbivore", "Carnivore", "Omnivore"])
-                if new_animal_type == "Herbivore":
-                    animals.append(Herbivore(name=f"Herbivore{cycle}", hunger=True, thirst=True,sentiment=random.randint(1, 8), size=random.randint(1, 10),sex=random.randint(0,1)))
-                elif new_animal_type == "Carnivore":
-                    animals.append(Carnival(name=f"Carnivore{cycle}", hunger=True, thirst=True,sentiment=random.randint(1, 8) ,size=random.randint(1, 10),sex=random.randint(0,1)))
-                elif new_animal_type == "Omnivore":
-                    animals.append(Omnivore(name=f"Omnivore{cycle}", hunger=True, thirst=True,sentiment=random.randint(1, 8), size=random.randint(1, 10),sex=random.randint(0,1)))
-                print(f"Añadido {new_animal_type}")
+            if inicio==True:
+                for i in range(50):
+                    ark.add_food(Vegetables(name=f"vegetal{i}",calorias=200,caducidad=4))
+                    ark.add_food(Meat(name=f"carne{i}",calorias=500,caducidad=2))
+                ark.add_water(1000)
+                for i in range(50):
+                    if len(animals) < ark.max_capacity["animal"]:
+                        new_animal_type = random.choice(["Herbivore", "Carnivore", "Omnivore"])
+                        if new_animal_type == "Herbivore":
+                            ark.add_animal(Herbivore(name=f"Herbivore{i}", hunger=True, thirst=True,sentiment=random.randint(1, 8), size=random.randint(1, 10),sex=random.randint(0,1)))
+                        elif new_animal_type == "Carnivore":
+                            ark.add_animal(Carnival(name=f"Carnivore{i}", hunger=True, thirst=True,sentiment=random.randint(1, 8) ,size=random.randint(1, 10),sex=random.randint(0,1)))
+                        elif new_animal_type == "Omnivore":
+                            ark.add_animal(Omnivore(name=f"Omnivore{i}", hunger=True, thirst=True,sentiment=random.randint(1, 8), size=random.randint(1, 10),sex=random.randint(0,1)))
+                        print(f"Añadido {new_animal_type}")
+                inicio=False
 
             # Alimentar y dar de beber a los animales
             for animal in animals[:]:  # Iterar sobre una copia para permitir eliminación
