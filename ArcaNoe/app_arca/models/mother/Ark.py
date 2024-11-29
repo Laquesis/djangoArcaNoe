@@ -158,15 +158,17 @@ class Ark:
             food for food in self.foods 
             if Ark.search_list_suitable_food(food, animal.animal_type)
         ]
-
+        
         for food in suitable_foods[:]:
             #print(food)
             if calorias_necesarias <= 0:
                 break
             if food.calorias <= calorias_necesarias:
                 calorias_necesarias -= food.calorias              
-                print(len(self.foods))
-                self.foods.remove(food)                
+                print(len(self.foods))                
+                idFoodEliminar=food.id
+                # Buscar el objeto con el ID coincidente
+                self.foods = [food_ for food_ in self.foods if food.id != idFoodEliminar]               
             else:
                 food.calorias -= calorias_necesarias
                 calorias_necesarias = 0
@@ -185,6 +187,8 @@ class Ark:
             for alimento in self.foods:
                 alimento.caducar()  
             self.tiempo = 0
+   
+
 
     def caducar(self):  
         from app_arca.models.mother.Food import Food

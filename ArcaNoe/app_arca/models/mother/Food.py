@@ -70,6 +70,7 @@ class Food:
     def __str__(self):
         # Provide string representation of the Animal object
         return (
+            f"Id: {self.id}\n"
             f"Name: {self.name}\n"
             f"Tipo: {'Vegetable' if self.tipo== 0 else 'Carne' }\n"
             f"Calorias: {self.calorias}\n"

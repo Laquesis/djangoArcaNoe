@@ -16,7 +16,7 @@ class ArkIntegrationTestCase(TestCase):
         print("=== INICIO DE LA SIMULACIÓN DEL ARCA ===")
 
         # Inicializar el arca con capacidad limitada
-        ark = Ark(max_capacity={"animal": 50, "food": 100, "water": 1000})
+        ark = Ark(max_capacity={"animal": 500, "food": 1000, "water": 1000})
 
         # Añadir recursos iniciales
       
@@ -30,6 +30,8 @@ class ArkIntegrationTestCase(TestCase):
                 for i in range(50):             
                     ark.add_food(Vegetables(name=f"vegetal{i}",calorias=200,caducidad=4))
                     ark.add_food(Meat(name=f"carne{i}",calorias=500,caducidad=2))
+                for a in ark.foods:
+                    print(a)
                 ark.add_water(1000)
                 for i in range(50):
                     if len(animals) < ark.max_capacity["animal"]:
@@ -48,15 +50,13 @@ class ArkIntegrationTestCase(TestCase):
             print("Comida restante en el arca:", ark_status["food"])
             print("Agua restante en el arca:", ark_status["water"])
             # Alimentar y dar de beber a los animales
-            #for animal in ark.animals:
-            #   print(animal)
+            for animal in ark.animals:
+                print(animal)
             for animal in ark.animals:  # Iterar sobre una copia para permitir eliminación
                 ark.alimentar(animal)
                 ark.dar_agua(animal)              
-                print(animal)
             ark.eliminarMuertos()
-            ark.eliminarCaducados()
-            
+            ark.eliminarCaducados()          
 
             
             # Verificar estado del arca
@@ -67,16 +67,22 @@ class ArkIntegrationTestCase(TestCase):
             print("Agua restante en el arca:", ark_status2["water"])
 
             # Condición de fin del ciclo
-            if ark_status2["animals"]<=0 or ark_status2["food"] <= 0 or ark_status2["water"] <= 0 or cycle==50:
-                print("=== FIN DE LA SIMULACIÓN DEL ARCA ===")             
+            if ark_status2["animals"]<=0 or ark_status2["food"] <= 0 or ark_status2["water"] <= 0:
+                print("=== FIN DE LA SIMULACIÓN DEL ARCA ===")  
+                ark.eliminarMuertos()
+                ark.eliminarCaducados()   
+                ark_status3 = ark.get_status()
+                print("Animales en el arca:", ark_status3["animals"])
+                print("Comida restante en el arca:", ark_status3["food"])
+                print("Agua restante en el arca:", ark_status3["water"])
+                print("=== SUPERVIVIENTES FINALES ===")
+                for e in ark.animals:
+                    print(e)
+                print("=== FIN ===")            
                 break
             
             cycle += 1
-        time.sleep(30)
-        ark_status3 = ark.get_status()
-        print("Animales en el arca:", ark_status3["animals"])
-        print("Comida restante en el arca:", ark_status3["food"])
-        print("Agua restante en el arca:", ark_status3["water"])
+      
         
     def test_run_integration(self):
         print("=== TEST 2 ===")
@@ -133,10 +139,12 @@ class ArkIntegrationTestCase(TestCase):
         print(f"{herb.name} está {'sediento' if herb.thirst else 'hidratado'}")
         print(f"{carn.name} está {'sediento' if carn.thirst else 'hidratado'}")
         print(f"{omni.name} está {'sediento' if omni.thirst else 'hidratado'}")
-
+        ark.eliminarCaducados()
+        ark.eliminarMuertos()
         # Estado final del arca
-        print("\n=== ESTADO FINAL DEL ARCA ===")
-        print("Animales en el arca:", ark.get_status()["animals"])
-        print("Comida restante en el arca:", ark.get_status()["food"])
-        print("Agua restante en el arca:", ark.get_status()["water"])
-        print("=== FIN DE LA SIMULACIÓN DEL ARCA ===")
+        print("\n=== ESTADO FINAL DEL ARCA 2 ===")
+        ark_status4 = ark.get_status()
+        print("Animales en el arca:", ark_status4["animals"])
+        print("Comida restante en el arca:", ark_status4["food"])
+        print("Agua restante en el arca:", ark_status4["water"])
+        print("=== FIN DE LA SIMULACIÓN DEL ARCA 2===")
