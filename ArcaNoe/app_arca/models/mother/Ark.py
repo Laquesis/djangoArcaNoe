@@ -203,7 +203,9 @@ class Ark:
             animal.thirst = False 
             animal.is_alive=True  
             print(f"{animal.name} ha bebido")    
-        else:            
+        elif animal.thirst == False: 
+            print(f"{animal.name} no tiene sed") 
+        elif animal.thirst == True and self.water==0:           
             animal.thirst = True
             animal.is_alive = False            
             print(f"{animal.name} ha muerto por falta de agua")
