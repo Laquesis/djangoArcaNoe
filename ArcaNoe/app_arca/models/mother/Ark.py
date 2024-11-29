@@ -198,12 +198,12 @@ class Ark:
         
 
     def dar_agua(self, animal):
-        if animal.thirst == True and self.water > 1:
+        if animal.thirst == True and self.water>=1:
             self.water -= 1
-            animal.thirst = False   
+            animal.thirst = False 
+            animal.is_alive=True  
             print(f"{animal.name} ha bebido")    
-        else:
-            self.water = 0
+        else:            
             animal.thirst = True
             animal.is_alive = False            
             print(f"{animal.name} ha muerto por falta de agua")

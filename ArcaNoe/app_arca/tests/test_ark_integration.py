@@ -32,7 +32,7 @@ class ArkIntegrationTestCase(TestCase):
                     ark.add_food(Meat(name=f"carne{i}",calorias=500,caducidad=2))
                 for a in ark.foods:
                     print(a)
-                ark.add_water(10000)
+                ark.add_water(1000)
                 for i in range(50):
                     if len(animals) < ark.max_capacity["animal"]:
                         new_animal_type = random.choice(["Herbivore", "Carnivore", "Omnivore"])
