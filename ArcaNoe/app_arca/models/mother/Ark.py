@@ -150,7 +150,13 @@ class Ark:
         if not animal.hunger:
             return None
 
-        if len(self.foods) <= 0:
+        if len(self.foods) == 0:
+            animal.set_hunger(True)
+            animal.death()   
+            animal.is_alive=False         
+            #print(len(self.animals))                     
+            print(f"{animal.name} ha muerto por falta de comida.")
+            self.eliminarMuertos()
             return None
 
         calorias_necesarias = animal.size
@@ -175,8 +181,9 @@ class Ark:
 
         if calorias_necesarias > 0:
             animal.set_hunger(True)
-            animal.death()            
-            print(len(self.animals))                     
+            animal.death()   
+            animal.is_alive=False         
+            #print(len(self.animals))                     
             print(f"{animal.name} ha muerto por falta de comida.")
         else:
             animal.set_hunger(False)
@@ -207,7 +214,8 @@ class Ark:
             print(f"{animal.name} no tiene sed") 
         elif animal.thirst == True and self.water==0:           
             animal.thirst = True
-            animal.is_alive = False            
+            animal.is_alive = False   
+            animal.death()         
             print(f"{animal.name} ha muerto por falta de agua")
 
     def eliminarMuertos(self):

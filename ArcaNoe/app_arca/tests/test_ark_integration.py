@@ -67,21 +67,23 @@ class ArkIntegrationTestCase(TestCase):
             print("Agua restante en el arca:", ark_status2["water"])
 
             # Condición de fin del ciclo
-            if ark_status2["animals"]<=0 or ark_status2["food"] <= 0 or ark_status2["water"] <= 0:
+            if ark_status2["animals"]<=0 or ark_status2["food"] <= 0 or ark_status2["water"] <= 0 :
                 print("=== FIN DE LA SIMULACIÓN DEL ARCA ===")  
                 ark.eliminarMuertos()
-                ark.eliminarCaducados()   
-                ark_status3 = ark.get_status()
-                print("Animales en el arca:", ark_status3["animals"])
-                print("Comida restante en el arca:", ark_status3["food"])
-                print("Agua restante en el arca:", ark_status3["water"])
-                print("=== SUPERVIVIENTES FINALES ===")
-                for e in ark.animals:
-                    print(e)
-                print("=== FIN ===")            
+                ark.eliminarCaducados()                         
                 break
             
             cycle += 1
+        ark.eliminarMuertos()
+        ark.eliminarCaducados()   
+        ark_status3 = ark.get_status()
+        print("Animales en el arca:", ark_status3["animals"])
+        print("Comida restante en el arca:", ark_status3["food"])
+        print("Agua restante en el arca:", ark_status3["water"])
+        print("=== SUPERVIVIENTES FINALES ===")
+        for e in ark.animals:
+            print(e)
+        print("=== FIN ===") 
       
         
     def test_run_integration(self):
