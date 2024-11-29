@@ -43,6 +43,9 @@ class ArkIntegrationTestCase(TestCase):
                         elif new_animal_type == "Omnivore":
                             ark.add_animal(Omnivore(name=f"Omnivore{str(i)}", hunger=True, thirst=True,sentiment=random.randint(1, 8), size=random.randint(1, 10),sex=random.randint(0,1)))
                         print(f"Añadido {new_animal_type}")
+                
+                for animal in ark.animals:
+                    print(animal)
                 inicio=False
             
             ark_status = ark.get_status()
@@ -50,8 +53,8 @@ class ArkIntegrationTestCase(TestCase):
             print("Comida restante en el arca:", ark_status["food"])
             print("Agua restante en el arca:", ark_status["water"])
             # Alimentar y dar de beber a los animales
-            for animal in ark.animals:
-                print(animal)
+            #for animal in ark.animals:
+            #    print(animal)
             for animal in ark.animals:  # Iterar sobre una copia para permitir eliminación
                 ark.alimentar(animal)
                 ark.dar_agua(animal)              
