@@ -84,8 +84,8 @@ class ArkIntegrationTestCase(TestCase):
         print("Comida restante en el arca:", ark_status3["food"])
         print("Agua restante en el arca:", ark_status3["water"])
         print("=== SUPERVIVIENTES FINALES ===")
-        for e in ark.animals:
-            print(e)
+        #for e in ark.animals:
+            #print(e)
         print("=== FIN ===") 
       
         
